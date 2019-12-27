@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Printed 1.0</title>
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<!--Import materialize.css-->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+	<!--Let browser know website is optimized for mobile-->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+
+<body>
+	<nav class="light-green">
+		<div class="nav-wrapper">
+			<a href="#" class="brand-logo">
+				<img src="https://i.imgur.com/ARgIQVd.png" alt="Printed" height="42" width="auto"
+					style="padding-top: 15px; padding-left: 10px;">
+			</a>
+			<ul id="nav-mobile" class="right hide-on-med-and-down">
+				<li><a href="settings">Acerca de</a></li>
+			</ul>
+		</div>
+	</nav>
+	<div class="container">
+		<div class="row">
+			<div class="center-align">
+				<h3>¡Bienvenido al sistema de Printed WiFi!</h3>
+			</div>
+		</div>
+		<div class="row center-align">
+			<p id="currentt" style="font-size:300%;">°0</p>
+		</div>
+		<div class="row">
+			<div class="input-field col s6">
+				<input placeholder="°C" id="temperature" name="temperature" type="text" class="validate">
+				<label for="temperature">Temperature deseada</label>
+			</div>
+			<button class="waves-effect waves-light btn-large amber" type="button" onClick="settemp()">ENVIAR</button>
+		</div>
+		<div class="row"><button class="waves-effect waves-light btn-large blue" type="button"
+				onClick="start()">REANUDAR</button></div>
+		<div class="row"><button class="waves-effect waves-light btn-large red darken-4" type="button"
+				onClick="stop()">DETENER</button></div>
+		<div class="divider"></div>
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+		<script>
+			function settemp(temp) {
+				var desiredTemp = document.getElementById("temperature").value
+				console.log("TEMP REQUEST: " + desiredTemp)
+				var xhttp = new XMLHttpRequest();
+				xhttp.open("GET", "temperature?temperature=" + desiredTemp, true);
+				xhttp.send();
+			}
+
+			function stop() {
+				console.log("STOPING REQUEST!")
+				var xhttp = new XMLHttpRequest();
+				xhttp.open("GET", "stop", true);
+				xhttp.send();
+			}
+
+			function start() {
+				console.log("RESUME REQUEST!")
+				var xhttp = new XMLHttpRequest();
+				xhttp.open("GET", "start", true);
+				xhttp.send();
+			}
+
+			setInterval(function () {
+				// Call a function repetatively with 2 Second interval
+				getTemp();
+			}, 1000); //2000mSeconds update rate
+
+			function getTemp() {
+				var xhttp = new XMLHttpRequest();
+				xhttp.onreadystatechange = function () {
+					if (this.readyState == 4 && this.status == 200) {
+						console.log("TEMP RESPONSE!")
+						document.getElementById("currentt").innerHTML =  "°" + this.responseText;
+					}
+				};
+				xhttp.open("GET", "temp", true);
+				xhttp.send();
+			}
+		</script>
+	</div>
+</body>
+
+</html>
